@@ -1,4 +1,4 @@
-from src.MLP import MLP, InputLayer, Layer
+from src.Neurony.main import MLP, InputLayer, Layer
 import numpy as np
 
 def test_and():

@@ -1,4 +1,4 @@
-from src.MLP import Layer
+from src.Neurony.main import Layer
 import numpy as np
 
 def test_z_computing():
