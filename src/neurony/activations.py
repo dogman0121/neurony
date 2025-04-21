@@ -1,6 +1,10 @@
 import numpy as np
 
 def relu(x):
+    """
+    :param x: array of sums (n_samples, n_neurons)
+    :returns: array of activations (n_samples, n_neurons)
+    """
     return np.maximum(0, x)
 
 
