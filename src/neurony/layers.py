@@ -8,6 +8,8 @@ from neurony.activations import (
     relu_derivative
 )
 
+from src.neurony.activations import get_activations_by_name
+
 
 class InputLayer:
     def __init__(self, output_size):
@@ -44,17 +46,7 @@ class Layer:
         self.weights = np.random.randn(self.output_size, input_size) * np.sqrt(2 / input_size)
         self.biases = np.zeros((1, self.output_size))
 
-        if self.activation_name == 'relu':
-            self.activation = relu
-            self.activation_derivative = relu_derivative
-        elif self.activation_name == "sigmoid":
-            self.activation = sigmoid
-            self.activation_derivative = sigmoid_derivative
-        elif self.activation_name == "tanh":
-            self.activation = tanh
-            self.activation_derivative = tanh_derivative
-        else:
-            raise ValueError("Unsupported activation function")
+        self.activation, self.activation_derivative = get_activations_by_name(self.activation_name)
 
     def forward(self, x):
         self.z = np.dot(x, self.weights.T) + self.biases
