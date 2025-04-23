@@ -7,6 +7,34 @@ from neurony.metrics import (
 )
 
 
+def batch_generator(x, y, batch_size=32, shuffle=True):
+    """
+    Infinity generator of batches
+
+    :param x: Learning Data
+    :param y: Target Data
+    :param batch_size: Batch size
+    :param shuffle: Do not shuffle
+    :return: Bayches (x_batch, y_batch)
+    """
+    assert len(x) == len(y), "x и y должны быть одинаковой длины"
+    num_samples = len(x)
+    indices = np.arange(num_samples)
+
+    while True:  # бесконечный цикл
+        if shuffle:
+            np.random.shuffle(indices)  # перемешиваем индексы
+
+        for start_idx in range(0, num_samples, batch_size):
+            end_idx = min(start_idx + batch_size, num_samples)
+            batch_indices = indices[start_idx:end_idx]
+
+            x_batch = np.array(x[batch_indices])
+            y_batch = np.array(y[batch_indices])
+
+            yield x_batch, y_batch
+
+
 class MLP:
     def __init__(self, architecture, learning_rate=0.1):
         self.layers = []
@@ -17,33 +45,6 @@ class MLP:
             input_size = architecture[i - 1].output_size if i > 0 else None
             layer.build(input_size, learning_rate)
             self.layers.append(layer)
-
-    def batch_generator(self, x, y, batch_size=32, shuffle=True):
-        """
-        Бесконечный генератор для создания батчей данных.
-
-        :param x: Признаки (матрица, где строки — примеры, а столбцы — признаки)
-        :param y: Целевые значения (вектор или матрица меток)
-        :param batch_size: Размер одного батча
-        :param shuffle: Перемешивать ли данные перед каждым проходом
-        :return: Батчи данных (x_batch, y_batch)
-        """
-        assert len(x) == len(y), "x и y должны быть одинаковой длины"
-        num_samples = len(x)
-        indices = np.arange(num_samples)
-
-        while True:  # бесконечный цикл
-            if shuffle:
-                np.random.shuffle(indices)  # перемешиваем индексы
-
-            for start_idx in range(0, num_samples, batch_size):
-                end_idx = min(start_idx + batch_size, num_samples)
-                batch_indices = indices[start_idx:end_idx]
-
-                x_batch = np.array(x[batch_indices])
-                y_batch = np.array(y[batch_indices])
-
-                yield x_batch, y_batch
 
     def _forward(self, x):
         for layer in self.layers:
