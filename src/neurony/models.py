@@ -15,7 +15,7 @@ def batch_generator(x, y, batch_size=32, shuffle=True):
     :param y: Target Data
     :param batch_size: Batch size
     :param shuffle: Do not shuffle
-    :return: Bayches (x_batch, y_batch)
+    :return: Batches (x_batch, y_batch)
     """
     assert len(x) == len(y), "x и y должны быть одинаковой длины"
     num_samples = len(x)
